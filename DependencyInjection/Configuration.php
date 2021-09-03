@@ -19,8 +19,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $tb = new TreeBuilder();
-        $root = $tb->root('iphp_file_store');
+        $tb = new TreeBuilder('iphp_file_store');
+        $root = $tb->getRootNode();
 
         $root
             ->children()
