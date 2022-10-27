@@ -24,21 +24,21 @@
 
 
         <!-- upload file namer -->
-        <service id="iphp.filestore.namer.default" class="%iphp.filestore.namer.default.class%"/>
+        <service id="iphp.filestore.namer.default" public="true" class="%iphp.filestore.namer.default.class%"/>
 
 
         <!-- upload file directory namer -->
-        <service id="iphp.filestore.directory_namer.default" class="%iphp.filestore.directory_namer.default.class%"/>
+        <service id="iphp.filestore.directory_namer.default" public="true" class="%iphp.filestore.directory_namer.default.class%"/>
 
         <!--  namer  invoker-->
         <service id="iphp.filestore.namer.invoker" class="%iphp.filestore.namer.invoker.class%"
-                 public="false">
+                 public="true">
             <argument type="service" id="service_container"/>
         </service>
 
 
         <service id="iphp.filestore.mapping.factory" class="Iphp\FileStoreBundle\Mapping\PropertyMappingFactory"
-                 public="false">
+                 public="true">
             <argument type="service" id="iphp.filestore.namer.invoker"/>
             <argument type="service" id="iphp.filestore.annotation.driver"/>
             <argument>%iphp.filestore.mappings%</argument>
@@ -46,19 +46,19 @@
 
         <!-- reading annotations from entity class file -->
         <service id="iphp.filestore.annotation.driver" class="Iphp\FileStoreBundle\Driver\AnnotationDriver"
-                 public="false">
+                 public="true">
             <argument type="service" id="annotation_reader"/>
         </service>
 
 
         <!-- storing file information (orm adapter), set in IphpFileStoreExtension -->
-        <service id="iphp.filestore.datastorage" class="%iphp.filestore.datastorage.class%" public="false"/>
+        <service id="iphp.filestore.datastorage" class="%iphp.filestore.datastorage.class%" public="true"/>
 
         <service id="iphp.filestore.filestorage.file_system" class="Iphp\FileStoreBundle\FileStorage\FileSystemStorage">
         </service>
 
         <service id="iphp.filestore.event_listener.uploader" class="Iphp\FileStoreBundle\EventListener\UploaderListener"
-                 public="false">
+                 public="true">
             <argument type="service" id="iphp.filestore.datastorage"/>
             <argument type="service" id="iphp.filestore.filestorage.file_system"/>
             <argument type="service" id="iphp.filestore.mapping.factory"/>

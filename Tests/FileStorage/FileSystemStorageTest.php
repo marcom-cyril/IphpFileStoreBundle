@@ -10,13 +10,14 @@ use org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
 use org\bovigo\vfs\vfsStream;
 use Iphp\FileStoreBundle\Tests\Mocks;
 use Iphp\FileStoreBundle\Tests\DummyEntity;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 /**
  * FileSystemStorageTest.
  *
  * @author Vitiko <vitiko@mail.ru>
  */
-class FileSystemStorageTest extends \PHPUnit_Framework_TestCase
+class FileSystemStorageTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -38,7 +39,7 @@ class FileSystemStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * Sets up the test.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->storage = new FileSystemStorage();
 
@@ -128,7 +129,7 @@ class FileSystemStorageTest extends \PHPUnit_Framework_TestCase
         });
 
         $this->assertFileExists($this->uploadedImageFile);
-        $this->assertFileNotExists($this->targetImageFileExistingDir);
+        $this->assertFileDoesNotExist($this->targetImageFileExistingDir);
 
 
         $fileData = $this->storage->upload($propertyMapping, $file);
@@ -144,7 +145,7 @@ class FileSystemStorageTest extends \PHPUnit_Framework_TestCase
     {
         //test mode
         $uploadedFile = new \Symfony\Component\HttpFoundation\File\UploadedFile(
-            $this->uploadedImageFile, '123.jpg', 'image/jpeg', null, null, true);
+            $this->uploadedImageFile, '123.jpg', 'image/jpeg', null, true);
 
         $propertyMapping = $this->createPropertyMapping('123.jpg', $this->targetImageFileExistingDir,
             array('123.jpg', '/images/123.jpg'));
@@ -156,13 +157,13 @@ class FileSystemStorageTest extends \PHPUnit_Framework_TestCase
 
 
         $this->assertFileExists($this->uploadedImageFile);
-        $this->assertFileNotExists($this->targetImageFileExistingDir);
+        $this->assertFileDoesNotExist($this->targetImageFileExistingDir);
         $this->assertFileExists(dirname($this->targetImageFileExistingDir));
 
         $filesize = filesize($this->uploadedImageFile);
         $fileData = $this->storage->upload($propertyMapping, $uploadedFile);
         $this->assertFileExists($this->targetImageFileExistingDir);
-        $this->assertFileNotExists($this->uploadedImageFile);
+        $this->assertFileDoesNotExist($this->uploadedImageFile);
         $this->assertTrue(filesize($this->targetImageFileExistingDir) == $filesize);
 
 
@@ -199,10 +200,10 @@ class FileSystemStorageTest extends \PHPUnit_Framework_TestCase
         });
 
 
-        $this->assertFileNotExists($this->targetImageFileNewDir);
+        $this->assertFileDoesNotExist($this->targetImageFileNewDir);
         $this->assertFileExists($this->uploadedImageFile);
 
-        $this->assertFileNotExists(dirname($this->targetImageFileNewDir));
+        $this->assertFileDoesNotExist(dirname($this->targetImageFileNewDir));
         $filesize = filesize($this->uploadedImageFile);
 
         $fileData = $this->storage->upload($propertyMapping, $file);
@@ -235,11 +236,11 @@ class FileSystemStorageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that an exception is thrown when try to move file to readonly dir
-     * @expectedException \Symfony\Component\HttpFoundation\File\Exception\FileException
      */
     public function testUploadUploadedImageFileToExistingReadonlyDir()
     {
-
+        $this->expectException(\Symfony\Component\HttpFoundation\File\Exception\FileException::class);
+        
         if (version_compare(PHP_VERSION, '5.4.0','<'))
         {
             $this->markTestSkipped('vfsStream and chown() works only in PHP 5.4+');
@@ -249,7 +250,7 @@ class FileSystemStorageTest extends \PHPUnit_Framework_TestCase
 
         //test mode
         $uploadedFile = new \Symfony\Component\HttpFoundation\File\UploadedFile(
-            $this->uploadedImageFile, '123.jpg', 'image/jpeg', null, null, true);
+            $this->uploadedImageFile, '123.jpg', 'image/jpeg', null, true);
 
         $propertyMapping = $this->createPropertyMapping('123.jpg',   $this->targetImageFileExistingReadonlyDir ,
             array('123.jpg', '/images-readonly/123.jpg'));
@@ -265,10 +266,10 @@ class FileSystemStorageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that an exception is thrown when try to move file to readonly dir
-     * @expectedException \Symfony\Component\HttpFoundation\File\Exception\FileException
      */
     public function testUploadImageFileToExistingReadonlyDir()
     {
+        $this->expectException(FileException::class);
 
         if (version_compare(PHP_VERSION, '5.4.0','<'))
         {

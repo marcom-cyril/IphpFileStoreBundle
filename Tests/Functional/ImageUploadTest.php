@@ -33,7 +33,7 @@ class ImageUploadTest extends BaseTestCase
         $client->submit($crawler->selectButton('Upload')->form(), array(
             'title' => 'Some title',
             'photo' => $fileToUpload,
-            'date[year]' => '2013',
+            'date[year]' => '2022',
             'date[month]' => '3',
             'date[day]' => '15'
         ));
@@ -45,7 +45,7 @@ class ImageUploadTest extends BaseTestCase
         $this->assertSame($crawler->filter('div.photo')->count(), 1);
 
 
-        $photos = $this->getEntityManager()->getRepository('TestBundle:Photo')->findAll();
+        $photos = $this->getEntityManager()->getRepository(Photo::class)->findAll();
         $this->assertSame(sizeof($photos), 1);
         $photo = $photos[0];
         $this->assertSame($photo->getTitle(), 'Some title');
@@ -53,11 +53,11 @@ class ImageUploadTest extends BaseTestCase
         //path to images dir and directory naming config in Tests/Functional/config/default.yml
         $this->assertSame($photo->getPhoto(), array(
 
-            'fileName' => '/2013/03/sonata-admin-iphpfile.jpeg',
+            'fileName' => '/2022/03/sonata-admin-iphpfile.jpeg',
             'originalName' => 'sonata-admin-iphpfile.jpeg',
             'mimeType' => 'application/octet-stream',
             'size' => $fileToUpload->getSize(),
-            'path' => '/photo/2013/03/sonata-admin-iphpfile.jpeg',
+            'path' => '/photo/2022/03/sonata-admin-iphpfile.jpeg',
             'width' => 671,
             'height' => 487
         ));

@@ -8,7 +8,7 @@ imports:
 iphp_file_store:
     mappings:
        file:
-           upload_dir:  %kernel.test_env_dir%/web/other/uploads
+           upload_dir:  '%kernel.test_env_dir%/web/other/uploads'
            upload_path: /other/uploads
 
            #directory naming by id property

@@ -43,7 +43,7 @@ class DefaultController extends Controller
 
         return $this->render('TestBundle:Photo:index.html.twig', array(
             'uploadForm' => $uploadForm->createView(),
-            'photos' => $em->getRepository('TestBundle:Photo')->findAll()
+            'photos' => $em->getRepository(Photo::class)->findAll()
         ));
     }
 
@@ -51,7 +51,7 @@ class DefaultController extends Controller
     public function editAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $photo = $em->getRepository('TestBundle:Photo')->findOneById($id);
+        $photo = $em->getRepository(Photo::class)->findOneById($id);
 
         $editForm = $this->createFormBuilder($photo)
             ->add('title', TextType::class)

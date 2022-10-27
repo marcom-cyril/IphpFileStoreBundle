@@ -5,14 +5,14 @@ use Iphp\FileStoreBundle\Naming\DefaultDirectoryNamer;
 use Iphp\FileStoreBundle\Tests\DummyEntity;
 use Iphp\FileStoreBundle\Tests\Mocks;
 
-class DefaultDirectoryNamerTest extends \PHPUnit_Framework_TestCase
+class DefaultDirectoryNamerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Iphp\FileStoreBundle\Naming\DefaultDirectoryNamer
      */
     protected $namer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->namer = new DefaultDirectoryNamer;
     }

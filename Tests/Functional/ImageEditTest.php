@@ -18,11 +18,12 @@ class ImageEditTest extends BaseTestCase
 
         $this->getEntityManager()->persist($this->createTestPhotoObject());
         $this->getEntityManager()->flush();
-        $this->assertLoadedPhotoParams($this->getEntityManager()->getRepository('TestBundle:Photo')->findOneById(1));
+        $this->assertLoadedPhotoParams($this->getEntityManager()->getRepository(Photo::class)->findOneById(1));
 
 
         //go to edit photo via form
         $crawler = $client->request('GET', '/edit/1/');
+        // var_dump($client->getResponse()->getContent());die;
         $this->assertPhotoExistsInForm($crawler);
 
 
@@ -52,7 +53,7 @@ class ImageEditTest extends BaseTestCase
         $this->assertNoPhotoOnForm($crawler);
 
         $this->getEntityManager()->clear();
-        $photoAfterUpdate = $this->getEntityManager()->getRepository('TestBundle:Photo')->findOneById(1);
+        $photoAfterUpdate = $this->getEntityManager()->getRepository(Photo::class)->findOneById(1);
         $this->assertSame($photoAfterUpdate->getPhoto(), null);
         $this->assertSame($photoAfterUpdate->getPhotoInfo(), null);
     }
@@ -68,7 +69,7 @@ class ImageEditTest extends BaseTestCase
 
         $photo = new Photo();
         $photo->setTitle('Second photo')
-            ->setDate(new \DateTime ('2013-04-05 00:00:00'))
+            ->setDate(new \DateTime ('2022-04-05 00:00:00'))
             ->setPhoto($existsFile)
             ->setPhotoUpload($alsoExistsFile);
 
@@ -79,21 +80,21 @@ class ImageEditTest extends BaseTestCase
     {
         //params of fixture files
         $this->assertSame($photoLoaded->getPhoto(), [
-            'fileName' => '/2013/04/front-images-list.jpeg',
+            'fileName' => '/2022/04/front-images-list.jpeg',
             'originalName' => 'front-images-list.jpeg',
             'mimeType' => 'image/jpeg',
             'size' => 67521,
-            'path' => '/photo/2013/04/front-images-list.jpeg',
+            'path' => '/photo/2022/04/front-images-list.jpeg',
             'width' => 445,
             'height' => 531
         ]);
 
         $this->assertSame($photoLoaded->getPhotoInfo(), [
-            'fileName' => '/2013/04/sonata-admin-iphpfile.jpeg',
+            'fileName' => '/2022/04/sonata-admin-iphpfile.jpeg',
             'originalName' => 'sonata-admin-iphpfile.jpeg',
             'mimeType' => 'image/jpeg',
             'size' => 48332,
-            'path' => '/photo/2013/04/sonata-admin-iphpfile.jpeg',
+            'path' => '/photo/2022/04/sonata-admin-iphpfile.jpeg',
             'width' => 671,
             'height' => 487
         ]);
@@ -103,37 +104,37 @@ class ImageEditTest extends BaseTestCase
     {
         //check foto exists in form
         $this->assertSame($crawler->filter('input[id="form_title"][value="Second photo"]')->count(), 1);
-        $this->assertSame($crawler->filter('option[value="2013"][selected="selected"]')->count(), 1);
+        $this->assertSame($crawler->filter('option[value="2022"][selected="selected"]')->count(), 1);
         $this->assertSame($crawler->filter('option[value="4"][selected="selected"]')->count(), 1);
 
 
         //displayed loaded image and checkbox for delete image
-        $this->assertSame($crawler->filter('img[src="/photo/2013/04/front-images-list.jpeg"]')->count(), 1);
+        $this->assertSame($crawler->filter('img[src="/photo/2022/04/front-images-list.jpeg"]')->count(), 1);
         $this->assertSame($crawler->filter('input[type="checkbox"][id="form_photo_delete"]')->count(), 1);
 
 
         //displayed loaded second image and checkbox for delete image
-        $this->assertSame($crawler->filter('img[src="/photo/2013/04/sonata-admin-iphpfile.jpeg"]')->count(), 1);
+        $this->assertSame($crawler->filter('img[src="/photo/2022/04/sonata-admin-iphpfile.jpeg"]')->count(), 1);
         $this->assertSame($crawler->filter('input[type="checkbox"][id="form_photoInfo_delete"]')->count(), 1);
     }
 
     function assertNoPhotoOnForm($crawler)
     {
         //after photo delete NOT displaying loaded image and checkbox for delete image
-        $this->assertSame($crawler->filter('img[src="/photo/2013/04/front-images-list.jpeg"]')->count(), 0);
+        $this->assertSame($crawler->filter('img[src="/photo/2022/04/front-images-list.jpeg"]')->count(), 0);
         $this->assertSame($crawler->filter('input[type="checkbox"][id="form_photo_delete"]')->count(), 0);
-        $this->assertSame($crawler->filter('img[src="/photo/2013/04/sonata-admin-iphpfile.jpeg"]')->count(), 0);
+        $this->assertSame($crawler->filter('img[src="/photo/2022/04/sonata-admin-iphpfile.jpeg"]')->count(), 0);
         $this->assertSame($crawler->filter('input[type="checkbox"][id="form_photoInfo_delete"]')->count(), 0);
     }
 
     function assertPreviousImageGone($crawler)
     {
         //previous image gone
-        $this->assertSame($crawler->filter('img[src="/photo/2013/04/front-images-list.jpeg"]')->count(), 0);
-        $this->assertSame($crawler->filter('img[src="/photo/2013/04/sonata-admin-iphpfile.jpeg"]')->count(), 0);
+        $this->assertSame($crawler->filter('img[src="/photo/2022/04/front-images-list.jpeg"]')->count(), 0);
+        $this->assertSame($crawler->filter('img[src="/photo/2022/04/sonata-admin-iphpfile.jpeg"]')->count(), 0);
         //new exists
-        $this->assertSame($crawler->filter('img[src="/photo/2013/04/php-elephant.png"]')->count(), 1);
-        $this->assertSame($crawler->filter('img[src="/photo/2013/04/github1.png"]')->count(), 1);
+        $this->assertSame($crawler->filter('img[src="/photo/2022/04/php-elephant.png"]')->count(), 1);
+        $this->assertSame($crawler->filter('img[src="/photo/2022/04/github1.png"]')->count(), 1);
 
     }
 }

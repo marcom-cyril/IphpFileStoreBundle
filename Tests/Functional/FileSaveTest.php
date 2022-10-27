@@ -30,7 +30,7 @@ class FileSaveTest extends BaseTestCase
             __DIR__ . '/../Fixtures/files/text.txt');
 
         $file->setTitle('new file')
-            ->setDate(new \DateTime('2013-04-04'))
+            ->setDate(new \DateTime('2022-04-04'))
             ->setFile($existsFile);
 
 
@@ -40,11 +40,11 @@ class FileSaveTest extends BaseTestCase
 
 
         $this->assertSame($file->getFile(), array(
-            'fileName' => '/File/file/2013/1.txt',
+            'fileName' => '/File/file/2022/1.txt',
             'originalName' => 'text.txt',
             'mimeType' => 'text/plain',
             'size' => 9,
-            'path' => '/file/File/file/2013/1.txt',
+            'path' => '/file/File/file/2022/1.txt',
         ));
 
         unset($file);
@@ -67,14 +67,14 @@ class FileSaveTest extends BaseTestCase
         //using web directory setted in config/default.yml
         $commandTester->execute(array(
             'command' => $command->getName(),
-            '--entity' => 'TestXmlConfigBundle:File',
+            '--entity' => \Iphp\FileStoreBundle\Tests\Functional\TestXmlConfigBundle\Entity\File::class,
             '--field' => 'file',
             '--force' => 1, // move file to new location
             '--webdir' => realpath($this->getContainer()->getParameter('kernel.test_env_dir') . '/web/')
         ));
 
 
-        $newFile = $this->getEntityManager()->getRepository('TestXmlConfigBundle:File')->findOneByTitle('new file');
+        $newFile = $this->getEntityManager()->getRepository(\Iphp\FileStoreBundle\Tests\Functional\TestXmlConfigBundle\Entity\File::class)->findOneByTitle('new file');
 
 
         $this->assertSame($newFile->getFile(), array(

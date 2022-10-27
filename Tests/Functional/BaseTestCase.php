@@ -25,7 +25,7 @@ class BaseTestCase extends WebTestCase
         return end($class);
 
     }
-    protected function setUp()
+    protected function setUp(): void
     {
         $dir = AppKernel::getTestBaseDir().'/'.static::getTestEnvFromCalledClass();
         $fs = new Filesystem();
